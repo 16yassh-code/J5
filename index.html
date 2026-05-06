@@ -108,6 +108,10 @@
     width: 100%;
     height: 470px;
     overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.24)),
+      radial-gradient(circle at 50% 20%, rgba(201,168,76,0.18), transparent 35%),
+      linear-gradient(180deg, #2f332e 0%, #1b1d18 55%, #0d0e0c 100%);
   }
 
   .car-img-wrap::after {
@@ -130,6 +134,56 @@
     object-position: center 40%;
     display: block;
     transition: transform 8s ease;
+  }
+
+  .car-img.is-hidden {
+    opacity: 0;
+  }
+
+  .car-fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    z-index: 1;
+  }
+
+  .car-fallback.show {
+    display: flex;
+  }
+
+  .fallback-panel {
+    width: min(100%, 520px);
+    padding: 1.4rem 1.5rem;
+    border-radius: 20px;
+    background: rgba(7, 8, 6, 0.62);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    text-align: center;
+  }
+
+  .fallback-kicker {
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 0.75rem;
+  }
+
+  .fallback-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .fallback-copy {
+    margin-top: 0.8rem;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-mid);
   }
 
   .car-block:hover .car-img {
@@ -597,8 +651,17 @@
       <img class="car-img"
         src="https://www.motoring.com.au/wp-content/uploads/2024/12/Jaecoo-J5-EV-hires-13.jpg"
         alt="Jaecoo J5 EV Stone Grey"
-        onerror="this.src='https://www.drive.com.au/wp-content/uploads/2025/01/2025-Jaecoo-J5-EV-7.jpg'; this.onerror=null;"
+        referrerpolicy="no-referrer"
+        crossorigin="anonymous"
+        onerror="this.classList.add('is-hidden'); document.getElementById('carFallback').classList.add('show');"
       />
+      <div class="car-fallback" id="carFallback">
+        <div class="fallback-panel">
+          <div class="fallback-kicker">Hero image unavailable</div>
+          <div class="fallback-title">J5 EV</div>
+          <div class="fallback-copy">The original image host is blocking external embedding. Add the car photo directly into this repo for a guaranteed top banner on GitHub Pages.</div>
+        </div>
+      </div>
     </div>
     <div class="car-meta">
       <div>
@@ -616,14 +679,14 @@
   <section class="hero-summary">
     <div class="summary-card">
       <div class="summary-label">Finance Snapshot</div>
-      <div class="summary-copy">A clean running ledger for the <strong>Jaecoo J5 EV</strong>, with paid amounts, remaining balance, and the next due milestone in one place.</div>
-      <div class="summary-note">The bottom timeline now tracks each payment by date and updates the amount left after every entry, so the next transfer is always obvious.</div>
+      <div class="summary-copy"><strong>$10,000</strong> has been paid so far for the <strong>Jaecoo J5 EV</strong>, with the tracker now reflecting your actual single payment only.</div>
+      <div class="summary-note">The ledger below records the 30 April transfer and keeps the remaining balance visible after each dated payment entry.</div>
     </div>
     <div class="due-card">
       <div class="due-label">Left To Pay</div>
-      <div class="due-amount">$10,000</div>
-      <div class="due-date">Due 30 April</div>
-      <div class="due-note">Current final milestone before the vehicle is fully paid.</div>
+      <div class="due-amount">$27,000</div>
+      <div class="due-date">After payment on 30 April</div>
+      <div class="due-note">Current outstanding balance based on a total vehicle price of $37,000.</div>
     </div>
   </section>
 
@@ -680,9 +743,7 @@
      Dates are display-only; amounts must be positive numbers.
   ═══════════════════════════════════════════════════════════════════════ */
   const PAYMENTS = [
-    { date: "12 January 2026", amount: 12000, note: "Initial booking payment" },
-    { date: "25 February 2026", amount: 10000, note: "Second instalment received" },
-    { date: "18 March 2026", amount: 5000, note: "Pre-delivery payment" },
+    { date: "30 April 2026", amount: 10000, note: "Payment received" },
   ];
   /* ═══════════════════════════════════════════════════════════════════════ */
 
