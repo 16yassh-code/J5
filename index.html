@@ -3,32 +3,22 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Jaecoo J5 EV — Payment Tracker</title>
+<title>Jaecoo J5 EV</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --total: 37000;
-    --bg: #f4f6f8;
-    --bg-soft: #eef2f5;
-    --panel: rgba(255, 255, 255, 0.76);
-    --panel-strong: rgba(255, 255, 255, 0.92);
-    --line: rgba(17, 24, 39, 0.08);
-    --line-strong: rgba(17, 24, 39, 0.14);
+    --bg: #f5f7fa;
+    --panel: rgba(255, 255, 255, 0.82);
+    --panel-strong: rgba(255, 255, 255, 0.94);
+    --line: rgba(15, 23, 42, 0.08);
     --text: #111827;
-    --text-soft: #4b5563;
-    --text-muted: #6b7280;
+    --text-soft: #5b6472;
     --accent: #0f172a;
-    --accent-soft: #334155;
-    --blue: #5ea5ff;
-    --blue-deep: #1d4ed8;
-    --green: #157f5b;
-    --shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
+    --blue: #2563eb;
+    --shadow: 0 22px 60px rgba(15, 23, 42, 0.08);
     --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.06);
-    --radius-xl: 32px;
-    --radius-lg: 24px;
-    --radius-md: 18px;
   }
 
   *, *::before, *::after {
@@ -37,19 +27,14 @@
     padding: 0;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
+    min-height: 100vh;
+    overflow-x: hidden;
     font-family: 'Manrope', sans-serif;
     color: var(--text);
     background:
-      radial-gradient(circle at top left, rgba(94, 165, 255, 0.16), transparent 26%),
-      radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.88), transparent 20%),
-      linear-gradient(180deg, #f8fafc 0%, #f2f5f8 45%, #edf1f5 100%);
-    min-height: 100vh;
-    overflow-x: hidden;
+      radial-gradient(circle at top left, rgba(147, 197, 253, 0.28), transparent 26%),
+      linear-gradient(180deg, #f8fafc 0%, #f1f5f9 48%, #eef2f6 100%);
   }
 
   body::before {
@@ -57,10 +42,10 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background-image: linear-gradient(rgba(255,255,255,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.22) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px);
     background-size: 40px 40px;
-    mask-image: radial-gradient(circle at center, black 30%, transparent 78%);
-    opacity: 0.24;
+    mask-image: radial-gradient(circle at center, black 28%, transparent 76%);
+    opacity: 0.28;
   }
 
   a {
@@ -73,44 +58,36 @@
     max-width: 100%;
   }
 
-  .page-shell {
+  .shell {
     position: relative;
     z-index: 1;
-    width: min(1280px, calc(100% - 32px));
+    width: min(1120px, calc(100% - 24px));
     margin: 0 auto;
-    padding-bottom: 48px;
+    padding: 18px 0 36px;
   }
 
   .topbar {
-    position: sticky;
-    top: 12px;
-    z-index: 30;
-    margin: 16px auto 24px;
-  }
-
-  .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 14px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.55);
-    background: rgba(255, 255, 255, 0.66);
-    backdrop-filter: blur(18px);
+    gap: 16px;
+    padding: 14px 16px;
     border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(18px);
     box-shadow: var(--shadow-soft);
   }
 
-  .nav-brand {
+  .brand {
     display: flex;
     align-items: center;
     gap: 12px;
-    min-width: 0;
   }
 
   .brand-badge {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     display: grid;
     place-items: center;
     border-radius: 50%;
@@ -119,140 +96,42 @@
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 0.12em;
-    text-transform: uppercase;
-    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
-  }
-
-  .brand-copy {
-    min-width: 0;
   }
 
   .brand-title {
     font-size: 14px;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
   .brand-subtitle {
     font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .nav-links a {
-    padding: 10px 14px;
-    border-radius: 999px;
     color: var(--text-soft);
-    font-size: 13px;
-    font-weight: 600;
-    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
-  }
-
-  .nav-links a:hover {
-    background: rgba(15, 23, 42, 0.06);
-    color: var(--accent);
-    transform: translateY(-1px);
-  }
-
-  .nav-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 18px;
-    border-radius: 999px;
-    border: 1px solid rgba(15, 23, 42, 0.1);
-    background: linear-gradient(135deg, #ffffff, #f3f6f9);
-    font-size: 13px;
-    font-weight: 700;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-
-  .nav-cta:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
-  }
-
-  .menu-toggle {
-    display: none;
-    width: 46px;
-    height: 46px;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.8);
-    color: var(--accent);
-    cursor: pointer;
-  }
-
-  .menu-toggle span,
-  .menu-toggle::before,
-  .menu-toggle::after {
-    content: '';
-    display: block;
-    width: 18px;
-    height: 2px;
-    margin: 0 auto;
-    background: currentColor;
-    border-radius: 999px;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-  }
-
-  .menu-toggle::before {
-    transform: translateY(-6px);
-  }
-
-  .menu-toggle::after {
-    transform: translateY(4px);
-  }
-
-  .menu-toggle.active span {
-    opacity: 0;
-  }
-
-  .menu-toggle.active::before {
-    transform: translateY(2px) rotate(45deg);
-  }
-
-  .menu-toggle.active::after {
-    transform: translateY(0) rotate(-45deg);
   }
 
   .hero {
-    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-    gap: 24px;
-    margin-bottom: 28px;
+    grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+    gap: 18px;
+    margin-top: 18px;
   }
 
-  .hero-copy,
-  .hero-media,
-  .overview-card,
-  .tracker-panel,
-  .progress-section,
-  .history-section,
-  .completion-banner,
-  .footer-card {
-    border: 1px solid rgba(255, 255, 255, 0.5);
+  .hero-card,
+  .hero-image-card,
+  .dashboard-card,
+  .progress-card {
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.56);
     background: var(--panel);
     backdrop-filter: blur(18px);
     box-shadow: var(--shadow);
   }
 
-  .hero-copy {
-    position: relative;
-    overflow: hidden;
-    border-radius: 36px;
-    padding: 36px;
+  .hero-card {
+    padding: 28px;
     background:
-      radial-gradient(circle at top left, rgba(94, 165, 255, 0.2), transparent 30%),
-      linear-gradient(180deg, rgba(255,255,255,0.88), rgba(245,248,251,0.74));
+      radial-gradient(circle at top left, rgba(147, 197, 253, 0.24), transparent 28%),
+      linear-gradient(180deg, rgba(255,255,255,0.9), rgba(244,247,250,0.82));
   }
 
   .eyebrow {
@@ -262,7 +141,7 @@
     padding: 8px 12px;
     border-radius: 999px;
     background: rgba(15, 23, 42, 0.05);
-    color: var(--accent-soft);
+    color: #334155;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -274,117 +153,57 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-    box-shadow: 0 0 0 5px rgba(94, 165, 255, 0.12);
+    background: var(--blue);
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.12);
   }
 
-  .hero-title {
-    margin-top: 22px;
-    font-size: clamp(2.8rem, 5.2vw, 5.4rem);
-    line-height: 0.95;
+  h1 {
+    margin-top: 18px;
+    font-size: clamp(2.4rem, 5vw, 4.6rem);
+    line-height: 0.96;
     letter-spacing: -0.06em;
     font-weight: 800;
-    max-width: 9ch;
+    max-width: 8ch;
   }
 
-  .hero-title span {
-    display: block;
-    color: var(--text-soft);
-    font-weight: 600;
-  }
-
-  .hero-note {
-    margin-top: 20px;
-    max-width: 54ch;
-    font-size: 16px;
-    line-height: 1.7;
+  .hero-sub {
+    margin-top: 14px;
+    font-size: 15px;
     color: var(--text-soft);
   }
 
-  .hero-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 28px;
-  }
-
-  .btn-primary,
-  .btn-secondary {
+  .hero-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 52px;
-    padding: 0 20px;
+    min-height: 54px;
+    margin-top: 28px;
+    padding: 0 22px;
     border-radius: 999px;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
     font-size: 14px;
     font-weight: 700;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.16);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
-  .btn-primary {
-    color: #fff;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
-  }
-
-  .btn-primary:hover,
-  .btn-secondary:hover {
+  .hero-button:hover {
     transform: translateY(-2px);
+    box-shadow: 0 22px 38px rgba(15, 23, 42, 0.2);
   }
 
-  .btn-secondary {
-    color: var(--accent);
-    border: 1px solid var(--line-strong);
-    background: rgba(255, 255, 255, 0.76);
-  }
-
-  .hero-metrics {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 30px;
-  }
-
-  .hero-metric {
-    padding: 16px 18px;
-    border-radius: 22px;
-    background: rgba(255,255,255,0.64);
-    border: 1px solid rgba(15, 23, 42, 0.06);
-  }
-
-  .hero-metric-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .hero-metric-value {
-    margin-top: 10px;
-    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
-
-  .hero-media {
+  .hero-image-card {
     position: relative;
     overflow: hidden;
-    min-height: 620px;
-    border-radius: 36px;
-    background:
-      radial-gradient(circle at top, rgba(94, 165, 255, 0.14), transparent 32%),
-      linear-gradient(180deg, rgba(255,255,255,0.84), rgba(241,245,249,0.7));
+    min-height: 420px;
   }
 
-  .hero-media::before {
+  .hero-image-card::after {
     content: '';
     position: absolute;
-    inset: 16px;
-    border-radius: 28px;
-    border: 1px solid rgba(255,255,255,0.68);
-    pointer-events: none;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(248,250,252,0.06), rgba(248,250,252,0.18) 52%, rgba(248,250,252,0.92));
   }
 
   .hero-image {
@@ -394,967 +213,228 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transform: scale(1.03);
-    transition: transform 7s ease;
-  }
-
-  .hero-media:hover .hero-image {
-    transform: scale(1.08);
   }
 
   .hero-overlay {
     position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(180deg, rgba(248,250,252,0.08), rgba(248,250,252,0.3) 55%, rgba(248,250,252,0.94)),
-      linear-gradient(120deg, rgba(15,23,42,0.18), transparent 45%);
-  }
-
-  .hero-floating {
-    position: absolute;
-    right: 24px;
-    bottom: 24px;
-    left: 24px;
-    display: grid;
-    gap: 12px;
-  }
-
-  .hero-floating-card {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 14px;
-    padding: 18px 20px;
-    border-radius: 24px;
-    border: 1px solid rgba(255,255,255,0.55);
-    background: rgba(255,255,255,0.72);
-    backdrop-filter: blur(16px);
-    box-shadow: var(--shadow-soft);
-  }
-
-  .hero-floating-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .hero-floating-value {
-    margin-top: 8px;
-    font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
-
-  .hero-floating-note {
-    font-size: 13px;
-    color: var(--text-soft);
-    align-self: end;
-    text-align: right;
-  }
-
-  .section {
-    margin-top: 24px;
-  }
-
-  .section-head {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-
-  .section-kicker {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .section-title {
-    margin-top: 8px;
-    font-size: clamp(1.7rem, 2.6vw, 2.7rem);
-    line-height: 1;
-    letter-spacing: -0.05em;
-    font-weight: 800;
-  }
-
-  .section-desc {
-    margin-top: 8px;
-    max-width: 54ch;
-    color: var(--text-soft);
-    line-height: 1.7;
-    font-size: 15px;
-  }
-
-  .overview-card {
-    padding: 24px;
-    border-radius: var(--radius-xl);
-    background:
-      radial-gradient(circle at top right, rgba(94,165,255,0.12), transparent 24%),
-      linear-gradient(180deg, rgba(255,255,255,0.86), rgba(246,249,252,0.8));
-  }
-
-  .overview-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 16px;
-  }
-
-  .overview-summary {
-    padding: 26px;
-    border-radius: 28px;
-    background: var(--panel-strong);
-    border: 1px solid var(--line);
-  }
-
-  .summary-copy {
-    font-size: clamp(1.8rem, 3vw, 3rem);
-    line-height: 1.03;
-    letter-spacing: -0.05em;
-    font-weight: 800;
-    max-width: 12ch;
-  }
-
-  .summary-copy strong {
-    color: var(--blue-deep);
-  }
-
-  .summary-note {
-    margin-top: 16px;
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--text-soft);
-    max-width: 56ch;
-  }
-
-  .summary-detail-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 22px;
-  }
-
-  .summary-detail {
-    padding: 16px 18px;
-    border-radius: 22px;
-    background: rgba(15,23,42,0.03);
-    border: 1px solid rgba(15,23,42,0.05);
-  }
-
-  .summary-detail-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .summary-detail-value {
-    margin-top: 10px;
-    font-size: 1.12rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-  }
-
-  .tracker-panel {
-    display: grid;
-    grid-template-rows: auto auto;
-    gap: 14px;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    z-index: 1;
     padding: 18px;
-    border-radius: 28px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(244,247,250,0.84));
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.62);
   }
 
-  .due-card {
-    position: relative;
-    overflow: hidden;
-    padding: 22px;
-    border-radius: 24px;
-    border: 1px solid var(--line);
-    background: linear-gradient(180deg, #0f172a, #1e293b);
-    color: #fff;
-    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2);
-  }
-
-  .due-card::after {
-    content: '';
-    position: absolute;
-    right: -80px;
-    top: -80px;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(94,165,255,0.35), transparent 62%);
-  }
-
-  .due-label {
+  .hero-overlay-label {
     font-size: 11px;
-    font-weight: 700;
+    color: var(--text-soft);
+    text-transform: uppercase;
     letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.72);
-  }
-
-  .due-amount {
-    margin-top: 14px;
-    font-size: clamp(2.4rem, 4vw, 3.8rem);
-    line-height: 0.96;
-    letter-spacing: -0.06em;
-    font-weight: 800;
-  }
-
-  .due-date {
-    margin-top: 16px;
-    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    color: rgba(255,255,255,0.86);
   }
 
-  .due-note {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.14);
-    color: rgba(255,255,255,0.72);
-    line-height: 1.6;
-    font-size: 13px;
-    max-width: 28ch;
-  }
-
-  .mini-specs {
-    display: grid;
-    gap: 10px;
-  }
-
-  .mini-spec {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 16px;
-    border-radius: 20px;
-    background: rgba(15,23,42,0.03);
-    border: 1px solid rgba(15,23,42,0.05);
-  }
-
-  .mini-spec-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .mini-spec-value {
-    text-align: right;
-    font-size: 14px;
-    font-weight: 800;
-  }
-
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .stat-cell {
-    padding: 22px;
-    border-radius: 24px;
-    border: 1px solid rgba(255,255,255,0.5);
-    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(245,248,251,0.78));
-    box-shadow: var(--shadow-soft);
-    transition: transform 0.28s ease, box-shadow 0.28s ease;
-  }
-
-  .stat-cell:hover,
-  .history-item:hover,
-  .overview-summary:hover,
-  .summary-detail:hover,
-  .mini-spec:hover,
-  .progress-section:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 22px 50px rgba(15, 23, 42, 0.08);
-  }
-
-  .stat-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .stat-value {
-    margin-top: 14px;
-    font-size: clamp(1.8rem, 2vw, 2.4rem);
+  .hero-overlay-value {
+    margin-top: 10px;
+    font-size: 1.9rem;
     font-weight: 800;
     letter-spacing: -0.05em;
-    line-height: 1;
   }
 
-  .stat-value sup {
-    font-size: 0.62em;
-    font-weight: 700;
-    margin-right: 2px;
-    top: -0.4em;
-    position: relative;
+  .dashboard {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 18px;
   }
 
-  .highlight {
-    color: var(--accent);
+  .dashboard-card {
+    padding: 20px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
-  .green {
-    color: var(--green);
+  .dashboard-card:hover,
+  .progress-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 46px rgba(15, 23, 42, 0.08);
   }
 
-  .progress-section {
-    padding: 24px;
-    border-radius: var(--radius-xl);
-  }
-
-  .progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-
-  .progress-title {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
+  .label {
+    font-size: 11px;
+    color: var(--text-soft);
     text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+
+  .value {
+    margin-top: 12px;
+    font-size: clamp(1.5rem, 2vw, 2.1rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    font-weight: 800;
+  }
+
+  .progress-card {
+    margin-top: 14px;
+    padding: 22px;
+  }
+
+  .progress-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   .progress-pct {
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-size: 2rem;
     font-weight: 800;
-    letter-spacing: -0.06em;
+    letter-spacing: -0.05em;
   }
 
   .progress-track {
-    position: relative;
     width: 100%;
-    height: 14px;
-    border-radius: 999px;
+    height: 10px;
+    margin-top: 14px;
     overflow: hidden;
+    border-radius: 999px;
     background: rgba(15, 23, 42, 0.08);
   }
 
   .progress-fill {
-    height: 100%;
     width: 0;
+    height: 100%;
     border-radius: 999px;
     background: linear-gradient(90deg, #0f172a, #2563eb 72%, #93c5fd);
     transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .progress-sub {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 14px;
-    color: var(--text-soft);
+  .progress-note {
+    margin-top: 12px;
     font-size: 14px;
-  }
-
-  .history-section {
-    padding: 24px;
-    border-radius: var(--radius-xl);
-  }
-
-  .section-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 14px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--line);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .section-heading span {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--accent);
-  }
-
-  .history-list {
-    list-style: none;
-    display: grid;
-    gap: 14px;
-    margin-top: 18px;
-  }
-
-  .history-item {
-    display: grid;
-    grid-template-columns: 58px minmax(0, 1.3fr) minmax(110px, 0.7fr) minmax(90px, 0.5fr);
-    align-items: center;
-    gap: 16px;
-    padding: 18px;
-    border-radius: 24px;
-    border: 1px solid rgba(15,23,42,0.06);
-    background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(245,248,251,0.82));
-    box-shadow: var(--shadow-soft);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  }
-
-  .item-index {
-    width: 58px;
-    height: 58px;
-    display: grid;
-    place-items: center;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #eff6ff, #dbeafe);
-    color: #1d4ed8;
-    font-weight: 800;
-    font-size: 1rem;
-  }
-
-  .item-date {
-    font-size: 13px;
     color: var(--text-soft);
-    line-height: 1.6;
   }
 
-  .item-date strong {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--accent);
-    letter-spacing: -0.02em;
-  }
-
-  .item-amount {
-    font-size: clamp(1.35rem, 2vw, 1.9rem);
-    font-weight: 800;
-    text-align: right;
-    letter-spacing: -0.05em;
-    color: var(--green);
-  }
-
-  .item-after {
-    text-align: right;
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .item-after strong {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 14px;
-    color: var(--accent);
-    text-transform: none;
-    letter-spacing: -0.02em;
-  }
-
-  .completion-banner {
-    display: none;
-    padding: 28px;
-    border-radius: var(--radius-xl);
-    background:
-      radial-gradient(circle at top, rgba(94,165,255,0.18), transparent 30%),
-      linear-gradient(180deg, rgba(255,255,255,0.9), rgba(245,248,251,0.82));
-    text-align: center;
-  }
-
-  .completion-banner h2 {
-    font-size: clamp(2rem, 3vw, 2.8rem);
-    font-weight: 800;
-    letter-spacing: -0.05em;
-  }
-
-  .completion-banner p {
-    margin-top: 10px;
-    color: var(--text-soft);
-    font-size: 15px;
-  }
-
-  .footer-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    padding: 24px;
-    border-radius: var(--radius-xl);
-    margin-top: 24px;
-  }
-
-  .footer-copy {
-    max-width: 52ch;
-  }
-
-  .footer-title {
-    font-size: 1.1rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-  }
-
-  .footer-text {
-    margin-top: 8px;
-    color: var(--text-soft);
-    line-height: 1.7;
-    font-size: 14px;
-  }
-
-  .footer-meta {
-    text-align: right;
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-
-  .empty-state {
-    padding: 48px 16px;
-    text-align: center;
-    border-radius: 24px;
-    border: 1px dashed var(--line-strong);
-    color: var(--text-muted);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .fade-up {
-    opacity: 0;
-    transform: translateY(24px);
-    animation: fadeUp 0.75s ease forwards;
-  }
-
-  .fade-delay-1 { animation-delay: 0.08s; }
-  .fade-delay-2 { animation-delay: 0.16s; }
-  .fade-delay-3 { animation-delay: 0.24s; }
-  .fade-delay-4 { animation-delay: 0.32s; }
-
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (max-width: 1024px) {
-    .hero,
-    .overview-grid {
+  @media (max-width: 980px) {
+    .hero {
       grid-template-columns: 1fr;
     }
 
-    .hero-media {
-      min-height: 520px;
-    }
-
-    .stats-row {
+    .dashboard {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
-    .footer-card {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .footer-meta {
-      text-align: left;
-    }
   }
 
-  @media (max-width: 760px) {
-    .page-shell {
-      width: min(100%, calc(100% - 20px));
+  @media (max-width: 520px) {
+    .shell {
+      width: min(100%, calc(100% - 16px));
+      padding-top: 14px;
     }
 
-    .topbar {
-      top: 10px;
-      margin-bottom: 18px;
+    .topbar,
+    .hero-card,
+    .hero-image-card,
+    .dashboard-card,
+    .progress-card {
+      border-radius: 24px;
     }
 
-    .nav {
-      position: relative;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      padding: 14px;
-      border-radius: 28px;
-    }
-
-    .menu-toggle {
-      display: inline-grid;
-      place-items: center;
-      flex-shrink: 0;
-    }
-
-    .nav-links {
-      display: none;
-      width: 100%;
-      flex-direction: column;
-      align-items: stretch;
-      padding-top: 10px;
-    }
-
-    .nav-links.open {
-      display: flex;
-    }
-
-    .nav-links a,
-    .nav-cta {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .hero-copy,
-    .hero-media,
-    .overview-card,
-    .progress-section,
-    .history-section,
-    .completion-banner,
-    .footer-card {
-      border-radius: 28px;
-    }
-
-    .hero-copy {
-      padding: 24px;
-    }
-
-    .hero-media {
-      min-height: 430px;
-    }
-
-    .hero-floating {
-      right: 16px;
-      bottom: 16px;
-      left: 16px;
-    }
-
-    .hero-floating-card {
-      grid-template-columns: 1fr;
-    }
-
-    .hero-floating-note {
-      text-align: left;
-    }
-
-    .hero-metrics,
-    .summary-detail-grid,
-    .stats-row {
-      grid-template-columns: 1fr;
-    }
-
-    .section-head,
-    .progress-header,
-    .progress-sub {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .history-item {
-      grid-template-columns: 52px 1fr;
-      gap: 12px;
-      padding: 16px;
-    }
-
-    .item-amount,
-    .item-after {
-      grid-column: 2;
-      text-align: left;
-    }
-  }
-
-  @media (max-width: 430px) {
-    .hero-title {
-      font-size: 2.6rem;
-    }
-
-    .hero-note,
-    .summary-note,
-    .section-desc,
-    .footer-text {
-      font-size: 14px;
-    }
-
-    .btn-primary,
-    .btn-secondary,
-    .nav-cta {
-      min-height: 50px;
-    }
-
-    .due-card,
-    .overview-summary,
-    .progress-section,
-    .history-section,
-    .footer-card {
+    .hero-card,
+    .dashboard-card,
+    .progress-card {
       padding: 18px;
     }
 
-    .history-item {
-      border-radius: 20px;
+    .hero-image-card {
+      min-height: 320px;
+    }
+
+    .dashboard {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .hero-button {
+      width: 100%;
     }
   }
 </style>
 </head>
 <body>
-  <div class="page-shell">
-    <div class="topbar fade-up">
-      <header class="nav">
-        <div class="nav-brand">
-          <div class="brand-badge">J5</div>
-          <div class="brand-copy">
-            <div class="brand-title">Jaecoo J5 EV Tracker</div>
-            <div class="brand-subtitle">Premium finance overview</div>
-          </div>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge">J5</div>
+        <div>
+          <div class="brand-title">Jaecoo J5 EV</div>
+          <div class="brand-subtitle">Family payment tracker</div>
         </div>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
-          <span></span>
-        </button>
-        <nav class="nav-links" id="navLinks">
-          <a href="#hero">Overview</a>
-          <a href="#finance">Finance</a>
-          <a href="#tracker">Tracker</a>
-          <a href="#history">History</a>
-          <a class="nav-cta" href="#progress">View Progress</a>
-        </nav>
-      </header>
-    </div>
+      </div>
+    </header>
 
     <main>
-      <section class="hero" id="hero">
-        <div class="hero-copy fade-up fade-delay-1">
-          <div class="eyebrow">Electric Purchase Dashboard</div>
-          <h1 class="hero-title">Premium EV ownership <span>tracked with clarity.</span></h1>
-          <p class="hero-note">A light, modern finance experience for your Jaecoo J5 EV purchase. Every payment, balance update, and delivery-linked interest detail is presented in a clean automotive-style layout.</p>
-          <div class="hero-actions">
-            <a class="btn-primary" href="#finance">Explore finance overview</a>
-            <a class="btn-secondary" href="#history">Review payment history</a>
-          </div>
-          <div class="hero-metrics">
-            <div class="hero-metric">
-              <div class="hero-metric-label">Vehicle price</div>
-              <div class="hero-metric-value">$37,000</div>
-            </div>
-            <div class="hero-metric">
-              <div class="hero-metric-label">Paid so far</div>
-              <div class="hero-metric-value">$12,500</div>
-            </div>
-            <div class="hero-metric">
-              <div class="hero-metric-label">Interest status</div>
-              <div class="hero-metric-value">Pre-delivery</div>
-            </div>
-          </div>
+      <section class="hero">
+        <div class="hero-card">
+          <div class="eyebrow">EV Dashboard</div>
+          <h1>J5 EV Tracker</h1>
+          <div class="hero-sub">Simple view of the car payment progress.</div>
+          <a class="hero-button" href="./payment-details.html">View Full Payment Details</a>
         </div>
 
-        <div class="hero-media fade-up fade-delay-2">
+        <div class="hero-image-card">
           <img class="hero-image" src="./car.webp" alt="Jaecoo J5 EV" />
-          <div class="hero-overlay"></div>
-          <div class="hero-floating">
-            <div class="hero-floating-card">
-              <div>
-                <div class="hero-floating-label">Remaining principal</div>
-                <div class="hero-floating-value" id="dueAmountHero">$24,500</div>
-              </div>
-              <div class="hero-floating-note">Interest begins only after delivery.</div>
-            </div>
-            <div class="hero-floating-card">
-              <div>
-                <div class="hero-floating-label">Estimated monthly interest after delivery</div>
-                <div class="hero-floating-value">$132.71</div>
-              </div>
-              <div class="hero-floating-note">Current monthly interest remains $0.</div>
-            </div>
+          <div class="hero-overlay">
+            <div class="hero-overlay-label">Remaining balance</div>
+            <div class="hero-overlay-value" id="heroRemaining">$24,500</div>
           </div>
         </div>
       </section>
 
-      <section class="section fade-up fade-delay-2" id="finance">
-        <div class="section-head">
-          <div>
-            <div class="section-kicker">Finance Overview</div>
-            <h2 class="section-title">A premium snapshot of where the purchase stands.</h2>
-            <p class="section-desc">The payment model stays unchanged. This redesign only improves presentation, making the vehicle price, paid amount, remaining principal, and delivery-linked interest easier to understand across desktop and mobile.</p>
-          </div>
+      <section class="dashboard">
+        <div class="dashboard-card">
+          <div class="label">Car Name</div>
+          <div class="value">Jaecoo J5 EV</div>
         </div>
-
-        <div class="overview-card">
-          <div class="overview-grid">
-            <div class="overview-summary">
-              <div class="summary-copy"><strong>$12,500</strong> has already been paid toward the Jaecoo J5 EV, with <strong>6.5% p.a.</strong> interest starting only after delivery.</div>
-              <div class="summary-note">Before delivery, interest remains $0. Once the vehicle is delivered, the current remaining principal of $24,500 will carry an estimated monthly interest of $132.71.</div>
-              <div class="summary-detail-grid">
-                <div class="summary-detail">
-                  <div class="summary-detail-label">Vehicle total</div>
-                  <div class="summary-detail-value">$37,000</div>
-                </div>
-                <div class="summary-detail">
-                  <div class="summary-detail-label">Current balance</div>
-                  <div class="summary-detail-value">$24,500</div>
-                </div>
-                <div class="summary-detail">
-                  <div class="summary-detail-label">Interest rate</div>
-                  <div class="summary-detail-value">6.5% p.a.</div>
-                </div>
-                <div class="summary-detail">
-                  <div class="summary-detail-label">Completion</div>
-                  <div class="summary-detail-value">34%</div>
-                </div>
-              </div>
-            </div>
-
-            <aside class="tracker-panel" id="tracker">
-              <div class="due-card">
-                <div class="due-label">Remaining Principal</div>
-                <div class="due-amount" id="dueAmount">$24,500</div>
-                <div class="due-date" id="dueDate">Not started yet / starts after car delivery</div>
-                <div class="due-note" id="dueNote">Current monthly interest is $0 before delivery. After delivery, estimated monthly interest will be $132.71.</div>
-              </div>
-              <div class="mini-specs">
-                <div class="mini-spec">
-                  <div class="mini-spec-label">Delivery status</div>
-                  <div class="mini-spec-value">Interest not started</div>
-                </div>
-                <div class="mini-spec">
-                  <div class="mini-spec-label">Current monthly interest</div>
-                  <div class="mini-spec-value">$0</div>
-                </div>
-                <div class="mini-spec">
-                  <div class="mini-spec-label">After-delivery estimate</div>
-                  <div class="mini-spec-value">$132.71 / month</div>
-                </div>
-              </div>
-            </aside>
-          </div>
+        <div class="dashboard-card">
+          <div class="label">Total Car Value</div>
+          <div class="value" id="statTotal">$37,000</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="label">Total Paid</div>
+          <div class="value" id="statPaid">$12,500</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="label">Remaining Balance</div>
+          <div class="value" id="statRemaining">$24,500</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="label">Progress</div>
+          <div class="value" id="pctLabel">34%</div>
         </div>
       </section>
 
-      <section class="section fade-up fade-delay-3">
-        <div class="section-head">
-          <div>
-            <div class="section-kicker">Payment Tracker</div>
-            <h2 class="section-title">Live payment metrics in a clean dashboard grid.</h2>
-          </div>
+      <section class="progress-card">
+        <div class="progress-head">
+          <div class="label">Payment Progress</div>
+          <div class="progress-pct" id="progressPct">34%</div>
         </div>
-        <div class="stats-row">
-          <div class="stat-cell">
-            <div class="stat-label">Vehicle Price</div>
-            <div class="stat-value highlight" id="statTotal"><sup>$</sup>37,000</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-label">Total Paid</div>
-            <div class="stat-value green" id="statPaid"><sup>$</sup><span id="paidNum">0</span></div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-label">Interest Rate</div>
-            <div class="stat-value" id="statInterest"><span id="interestNum">6.5% p.a.</span></div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-label">Monthly Interest Now</div>
-            <div class="stat-value" id="statRemaining"><sup>$</sup><span id="remainNum">0</span></div>
-          </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
         </div>
+        <div class="progress-note" id="progressNote">$24,500 remaining</div>
       </section>
-
-      <section class="section fade-up fade-delay-3" id="progress">
-        <div class="section-head">
-          <div>
-            <div class="section-kicker">Progress</div>
-            <h2 class="section-title">Completion visualized with premium simplicity.</h2>
-          </div>
-        </div>
-        <div class="progress-section">
-          <div class="progress-header">
-            <div class="progress-title">Purchase Completion</div>
-            <div class="progress-pct" id="pctLabel">0%</div>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="progressFill" style="width:0%"></div>
-          </div>
-          <div class="progress-sub">
-            <span id="progressLeft">$37,000 remaining principal</span>
-            <span id="progressCount">0 payments made</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="section fade-up fade-delay-4" id="history">
-        <div class="section-head">
-          <div>
-            <div class="section-kicker">Payment History</div>
-            <h2 class="section-title">Each payment entry, optimized for mobile and desktop.</h2>
-            <p class="section-desc">The ledger below keeps the exact same payment data and render logic, now restyled as responsive premium cards.</p>
-          </div>
-        </div>
-        <div class="history-section">
-          <div class="section-heading">
-            Payment History
-            <span id="totalPaymentsLabel">—</span>
-          </div>
-          <ul class="history-list" id="historyList">
-            <li class="empty-state">No payments recorded yet</li>
-          </ul>
-        </div>
-      </section>
-
-      <div class="completion-banner fade-up fade-delay-4" id="completionBanner">
-        <h2>Fully Paid ✦</h2>
-        <p>Your Jaecoo J5 EV is fully paid and the remaining principal has reached zero.</p>
-      </div>
     </main>
-
-    <footer class="footer-card fade-up fade-delay-4">
-      <div class="footer-copy">
-        <div class="footer-title">Jaecoo J5 EV finance tracker</div>
-        <div class="footer-text">A redesigned frontend experience focused on premium EV presentation, responsive usability, and clear payment visibility, while preserving the underlying finance logic exactly as currently implemented.</div>
-      </div>
-      <div class="footer-meta">
-        <div>Modern light UI</div>
-        <div>Mobile-first layout</div>
-        <div>Responsive across phone, tablet, and desktop</div>
-      </div>
-    </footer>
   </div>
 
 <script>
-  const menuToggle = document.getElementById('menuToggle');
-  const navLinks = document.getElementById('navLinks');
-
-  menuToggle.addEventListener('click', () => {
-    const isOpen = navLinks.classList.toggle('open');
-    menuToggle.classList.toggle('active', isOpen);
-    menuToggle.setAttribute('aria-expanded', String(isOpen));
-  });
-
-  navLinks.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      menuToggle.classList.remove('active');
-      menuToggle.setAttribute('aria-expanded', 'false');
-    });
-  });
-
-  /* ═══════════════════════════════════════════════════════════════════════
-     PAYMENT CONFIGURATION — EDIT THIS ARRAY TO RECORD YOUR PAYMENTS
-     Add objects: { date: "15 Jan 2025", amount: 5000 }
-     Dates are display-only; amounts must be positive numbers.
-  ═══════════════════════════════════════════════════════════════════════ */
   const PAYMENTS = [
     { date: "07 Apr 2026", amount: 1000, type: "Down Payment", status: "Paid" },
     { date: "27 Apr 2026", amount: 10000, type: "Down Payment", status: "Paid" },
     { date: "05 May 2026", amount: 1500, type: "Down Payment", status: "Paid" },
   ];
-  /* ═══════════════════════════════════════════════════════════════════════ */
 
   const TOTAL = 37000;
   const INTEREST_RATE = 0.065;
@@ -1371,50 +451,19 @@
     const payments = [...PAYMENTS].sort((a, b) => parseDate(a.date) - parseDate(b.date));
     const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
     const principalBalance = Math.max(0, TOTAL - totalPaid);
-    const monthlyInterestAfterDelivery = principalBalance * INTEREST_RATE / 12;
     const pct = Math.min(100, (totalPaid / TOTAL) * 100);
 
-    document.getElementById('paidNum').textContent = fmt(totalPaid);
-    document.getElementById('interestNum').textContent = '6.5% p.a.';
-    document.getElementById('remainNum').textContent = fmt(0);
+    document.getElementById('statTotal').textContent = '$' + fmt(TOTAL);
+    document.getElementById('statPaid').textContent = '$' + fmt(totalPaid);
+    document.getElementById('statRemaining').textContent = '$' + fmt(principalBalance);
+    document.getElementById('heroRemaining').textContent = '$' + fmt(principalBalance);
     document.getElementById('pctLabel').textContent = Math.round(pct) + '%';
-    document.getElementById('progressLeft').textContent = '$' + fmt(principalBalance) + ' remaining principal';
-    document.getElementById('progressCount').textContent = payments.length + ' payment' + (payments.length !== 1 ? 's' : '') + ' made';
-    document.getElementById('totalPaymentsLabel').textContent = payments.length > 0 ? payments.length + ' entries' : '—';
-    document.getElementById('dueAmount').textContent = '$' + fmt(principalBalance);
-    document.getElementById('dueAmountHero').textContent = '$' + fmt(principalBalance);
-    document.getElementById('dueDate').textContent = 'Not started yet / starts after car delivery';
-    document.getElementById('dueNote').textContent = 'Current monthly interest is $0 before delivery. After delivery, estimated monthly interest will be $' + monthlyInterestAfterDelivery.toFixed(2) + '.';
+    document.getElementById('progressPct').textContent = Math.round(pct) + '%';
+    document.getElementById('progressNote').textContent = '$' + fmt(principalBalance) + ' remaining';
 
     setTimeout(() => {
       document.getElementById('progressFill').style.width = pct + '%';
     }, 300);
-
-    const list = document.getElementById('historyList');
-
-    if (payments.length === 0) {
-      list.innerHTML = '<li class="empty-state">No payments recorded yet</li>';
-    } else {
-      list.innerHTML = '';
-      payments.forEach((p, i) => {
-        const li = document.createElement('li');
-        li.className = 'history-item';
-        li.innerHTML = `
-          <div class="item-index">${i + 1}</div>
-          <div class="item-date"><strong>${p.date}</strong>${p.type} · ${p.status}</div>
-          <div class="item-amount">$${fmt(p.amount)}</div>
-          <div class="item-after"><strong>${p.status}</strong>Recorded</div>
-        `;
-        list.appendChild(li);
-      });
-    }
-
-    if (principalBalance <= 0) {
-      document.getElementById('completionBanner').style.display = 'block';
-      document.getElementById('remainNum').textContent = '0';
-    } else {
-      document.getElementById('completionBanner').style.display = 'none';
-    }
   }
 
   render();
