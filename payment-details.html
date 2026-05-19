@@ -312,8 +312,9 @@
 
   @media (max-width: 520px) {
     .shell {
-      width: min(100%, calc(100% - 16px));
-      padding-top: 14px;
+      width: min(100%, calc(100% - 12px));
+      padding-top: 12px;
+      padding-bottom: 24px;
     }
 
     .topbar,
@@ -342,17 +343,58 @@
     .grid-card,
     .history-card,
     .completion-banner {
-      padding: 18px;
+      padding: 16px;
+    }
+
+    .hero-sub,
+    .subvalue {
+      font-size: 13px;
+    }
+
+    .details-grid {
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .value {
+      font-size: 1.75rem;
+    }
+
+    .section-head {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .history-item {
-      grid-template-columns: 52px 1fr;
+      grid-template-columns: 44px 1fr;
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .item-index {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      font-size: 13px;
+    }
+
+    .item-date strong {
+      font-size: 14px;
+    }
+
+    .item-date {
+      font-size: 12px;
     }
 
     .item-amount,
     .item-after {
       grid-column: 2;
       text-align: left;
+    }
+
+    .item-amount {
+      font-size: 1.3rem;
     }
   }
 </style>
@@ -392,17 +434,12 @@
         </div>
         <div class="grid-card">
           <div class="label">Interest Rate</div>
-          <div class="value" id="interestNum">6.5% p.a.</div>
+          <div class="value" id="interestNum">6.25% p.a.</div>
         </div>
         <div class="grid-card">
           <div class="label">Monthly Interest Now</div>
           <div class="value" id="remainNum">$0</div>
-          <div class="subvalue">Before delivery</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">After Delivery Estimate</div>
-          <div class="value" id="monthlyEstimate">$132.71</div>
-          <div class="subvalue">Per month</div>
+          <div class="subvalue" id="remainNote">At current remaining balance</div>
         </div>
         <div class="grid-card">
           <div class="label">Interest Status</div>
@@ -421,6 +458,24 @@
         </ul>
       </section>
 
+      <section class="details-grid">
+        <div class="grid-card">
+          <div class="label">Monthly Interest</div>
+          <div class="value" id="monthlyInterestCard">$0</div>
+          <div class="subvalue">Current monthly interest on remaining balance</div>
+        </div>
+        <div class="grid-card">
+          <div class="label">Daily Interest</div>
+          <div class="value" id="dailyInterestCard">$0</div>
+          <div class="subvalue">Current daily interest on remaining balance</div>
+        </div>
+        <div class="grid-card">
+          <div class="label">How Interest Is Counted</div>
+          <div class="value" id="interestExplainTitle">6.25% from 18 May 2026</div>
+          <div class="subvalue" id="interestExplainNote">Interest = remaining balance × 0.0625 ÷ 365 × days since 18 May 2026.</div>
+        </div>
+      </section>
+
       <div class="completion-banner" id="completionBanner">
         <h2>Fully Paid ✦</h2>
         <p>Your Jaecoo J5 EV is fully paid and the remaining principal has reached zero.</p>
@@ -433,10 +488,12 @@
     { date: "07 Apr 2026", amount: 1000, type: "Down Payment", status: "Paid" },
     { date: "27 Apr 2026", amount: 10000, type: "Down Payment", status: "Paid" },
     { date: "05 May 2026", amount: 1500, type: "Down Payment", status: "Paid" },
+    { date: "20 May 2026", amount: 1000, type: "Down Payment", status: "Paid" },
   ];
 
   const TOTAL = 37000;
-  const INTEREST_RATE = 0.065;
+  const INTEREST_RATE = 0.0625;
+  const INTEREST_START_DATE = new Date(2026, 4, 18, 12, 0, 0);
 
   function fmt(n) {
     return Math.round(n).toLocaleString('en-AU');
@@ -446,10 +503,59 @@
     return new Date(value + ' 12:00:00');
   }
 
+  function diffDays(from, to) {
+    const msPerDay = 24 * 60 * 60 * 1000;
+    return Math.max(0, Math.round((to - from) / msPerDay));
+  }
+
+  function calculateInterestSummary(payments) {
+    const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
+    const remainingBalance = Math.max(0, TOTAL - totalPaid);
+    const today = new Date();
+    const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0);
+    const daysSinceInterestStart = diffDays(INTEREST_START_DATE, normalizedToday);
+    const dailyInterest = remainingBalance * INTEREST_RATE / 365;
+
+    return {
+      remainingBalance,
+      totalInterestAccrued: dailyInterest * daysSinceInterestStart,
+      dailyInterest,
+      daysSinceInterestStart,
+    };
+  }
+
+  function buildPaymentRows(payments) {
+    let remainingBalance = TOTAL;
+    let interestAnchorDate = INTEREST_START_DATE;
+
+    return payments.map((payment, index) => {
+      const paymentDate = parseDate(payment.date);
+      let interestPaid = 0;
+
+      if (index >= 3 && paymentDate > interestAnchorDate) {
+        const days = diffDays(interestAnchorDate, paymentDate);
+        interestPaid = remainingBalance * INTEREST_RATE / 365 * days;
+      }
+
+      remainingBalance = Math.max(0, remainingBalance - payment.amount);
+
+      if (paymentDate > INTEREST_START_DATE) {
+        interestAnchorDate = paymentDate;
+      }
+
+      return {
+        ...payment,
+        interestPaid,
+      };
+    });
+  }
+
   function render() {
     const payments = [...PAYMENTS].sort((a, b) => parseDate(a.date) - parseDate(b.date));
+    const paymentRows = buildPaymentRows(payments);
     const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
-    const principalBalance = Math.max(0, TOTAL - totalPaid);
+    const interestSummary = calculateInterestSummary(payments);
+    const principalBalance = interestSummary.remainingBalance;
     const monthlyInterestAfterDelivery = principalBalance * INTEREST_RATE / 12;
     const pct = Math.min(100, (totalPaid / TOTAL) * 100);
 
@@ -457,11 +563,15 @@
     document.getElementById('statPaid').textContent = '$' + fmt(totalPaid);
     document.getElementById('dueAmount').textContent = '$' + fmt(principalBalance);
     document.getElementById('pctLabel').textContent = Math.round(pct) + '%';
-    document.getElementById('interestNum').textContent = '6.5% p.a.';
-    document.getElementById('remainNum').textContent = '$' + fmt(0);
-    document.getElementById('monthlyEstimate').textContent = '$' + monthlyInterestAfterDelivery.toFixed(2);
-    document.getElementById('dueDate').textContent = 'Not started yet';
-    document.getElementById('dueNote').textContent = 'Starts after car delivery';
+    document.getElementById('interestNum').textContent = '6.25% p.a.';
+    document.getElementById('remainNum').textContent = '$' + monthlyInterestAfterDelivery.toFixed(2);
+    document.getElementById('remainNote').textContent = 'At current remaining balance';
+    document.getElementById('dueDate').textContent = interestSummary.daysSinceInterestStart + ' days since 18 May 2026';
+    document.getElementById('dueNote').textContent = 'Interest accrues on remaining balance only';
+    document.getElementById('monthlyInterestCard').textContent = '$' + monthlyInterestAfterDelivery.toFixed(2);
+    document.getElementById('dailyInterestCard').textContent = '$' + interestSummary.dailyInterest.toFixed(2);
+    document.getElementById('interestExplainTitle').textContent = '6.25% from 18 May 2026';
+    document.getElementById('interestExplainNote').textContent = 'Interest = remaining balance x 0.0625 / 365 x days since 18 May 2026.';
     document.getElementById('totalPaymentsLabel').textContent = payments.length > 0 ? payments.length + ' entries' : '—';
 
     const list = document.getElementById('historyList');
@@ -470,14 +580,14 @@
       list.innerHTML = '<li class="empty-state">No payments recorded yet</li>';
     } else {
       list.innerHTML = '';
-      payments.forEach((p, i) => {
+      paymentRows.forEach((p, i) => {
         const li = document.createElement('li');
         li.className = 'history-item';
         li.innerHTML = `
           <div class="item-index">${i + 1}</div>
           <div class="item-date"><strong>${p.date}</strong>${p.type} · ${p.status}</div>
           <div class="item-amount">$${fmt(p.amount)}</div>
-          <div class="item-after"><strong>${p.status}</strong>Recorded</div>
+          <div class="item-after"><strong>$${fmt(p.interestPaid)}</strong>Interest Paid</div>
         `;
         list.appendChild(li);
       });
@@ -485,7 +595,9 @@
 
     if (principalBalance <= 0) {
       document.getElementById('completionBanner').style.display = 'block';
-      document.getElementById('remainNum').textContent = '$0';
+      document.getElementById('remainNum').textContent = '$0.00';
+      document.getElementById('monthlyInterestCard').textContent = '$0.00';
+      document.getElementById('dailyInterestCard').textContent = '$0.00';
     } else {
       document.getElementById('completionBanner').style.display = 'none';
     }

@@ -362,8 +362,9 @@
 
   @media (max-width: 520px) {
     .shell {
-      width: min(100%, calc(100% - 16px));
-      padding-top: 14px;
+      width: min(100%, calc(100% - 12px));
+      padding-top: 12px;
+      padding-bottom: 24px;
     }
 
     .topbar,
@@ -406,16 +407,26 @@
     .hero-card,
     .dashboard-card,
     .progress-card {
-      padding: 18px;
+      padding: 16px;
     }
 
     .hero-image-card {
-      min-height: 320px;
+      min-height: 280px;
     }
 
     .dashboard {
       grid-template-columns: 1fr;
       gap: 12px;
+    }
+
+    .hero-sub,
+    .progress-note {
+      font-size: 13px;
+    }
+
+    .value,
+    .progress-pct {
+      font-size: 1.7rem;
     }
 
     .hero-button {
@@ -495,10 +506,11 @@
     { date: "07 Apr 2026", amount: 1000, type: "Down Payment", status: "Paid" },
     { date: "27 Apr 2026", amount: 10000, type: "Down Payment", status: "Paid" },
     { date: "05 May 2026", amount: 1500, type: "Down Payment", status: "Paid" },
+    { date: "20 May 2026", amount: 1000, type: "Down Payment", status: "Paid" },
   ];
 
   const TOTAL = 37000;
-  const INTEREST_RATE = 0.065;
+  const INTEREST_RATE = 0.0625;
 
   function fmt(n) {
     return Math.round(n).toLocaleString('en-AU');
