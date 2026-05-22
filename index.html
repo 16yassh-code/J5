@@ -220,6 +220,17 @@
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .hero-actions .hero-button {
+    margin-top: 0;
+  }
+
   .hero-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 22px 38px rgba(15, 23, 42, 0.2);
@@ -429,8 +440,13 @@
       font-size: 1.7rem;
     }
 
+    .hero-actions {
+      flex-direction: column;
+    }
+
     .hero-button {
       width: 100%;
+      margin-top: 0;
     }
   }
 </style>
@@ -453,7 +469,10 @@
           <div class="eyebrow">EV Dashboard</div>
           <h1>J5 EV Tracker</h1>
           <div class="hero-sub">Simple view of the car payment progress.</div>
-          <a class="hero-button" href="./payment-details.html">View Full Payment Details</a>
+          <div class="hero-actions">
+            <a class="hero-button" href="./payment-details.html">View Full Payment Details</a>
+            <a class="hero-button" href="./interest-history.html">View Interest History</a>
+          </div>
         </div>
 
         <div class="hero-image-card">
@@ -507,6 +526,7 @@
     { date: "27 Apr 2026", amount: 10000, type: "Down Payment", status: "Paid" },
     { date: "05 May 2026", amount: 1500, type: "Down Payment", status: "Paid" },
     { date: "20 May 2026", amount: 1000, type: "Down Payment", status: "Paid" },
+    { date: "22 May 2026", amount: 1500, type: "Down Payment", status: "Paid" },
   ];
 
   const TOTAL = 37000;

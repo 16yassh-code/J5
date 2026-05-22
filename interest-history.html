@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Payment Details — Jaecoo J5 EV</title>
+<title>Interest History — Jaecoo J5 EV</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -117,8 +117,7 @@
 
   .hero,
   .grid-card,
-  .history-card,
-  .completion-banner {
+  .history-card {
     margin-top: 18px;
     border-radius: 30px;
     border: 1px solid rgba(255, 255, 255, 0.56);
@@ -215,7 +214,7 @@
 
   .history-item {
     display: grid;
-    grid-template-columns: 52px minmax(0, 1.2fr) minmax(100px, 0.7fr) minmax(90px, 0.5fr);
+    grid-template-columns: 52px minmax(0, 1.1fr) minmax(120px, 0.8fr) minmax(120px, 0.8fr);
     align-items: center;
     gap: 14px;
     padding: 16px;
@@ -251,7 +250,7 @@
   }
 
   .item-amount {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 800;
     text-align: right;
     color: var(--green);
@@ -275,35 +274,6 @@
     letter-spacing: -0.02em;
   }
 
-  .completion-banner {
-    display: none;
-    padding: 22px;
-    text-align: center;
-  }
-
-  .completion-banner h2 {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
-
-  .completion-banner p {
-    margin-top: 8px;
-    color: var(--text-soft);
-  }
-
-  .empty-state {
-    padding: 40px 16px;
-    border-radius: 22px;
-    border: 1px dashed rgba(15, 23, 42, 0.16);
-    text-align: center;
-    color: var(--text-soft);
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
   @media (max-width: 860px) {
     .details-grid {
       grid-template-columns: 1fr;
@@ -320,8 +290,7 @@
     .topbar,
     .hero,
     .grid-card,
-    .history-card,
-    .completion-banner {
+    .history-card {
       border-radius: 24px;
     }
 
@@ -341,8 +310,7 @@
 
     .hero,
     .grid-card,
-    .history-card,
-    .completion-banner {
+    .history-card {
       padding: 16px;
     }
 
@@ -404,88 +372,54 @@
     <header class="topbar">
       <div>
         <div class="brand-title">Jaecoo J5 EV</div>
-        <div class="brand-subtitle">Payment details</div>
+        <div class="brand-subtitle">Interest history</div>
       </div>
-      <a class="back-link" href="./index.html">Back to Dashboard</a>
+      <a class="back-link" href="./payment-details.html">Back to Payment Details</a>
     </header>
 
     <main>
       <section class="hero">
-        <h1>Payment Details</h1>
-        <div class="hero-sub">Full view of payment history, balance, interest, and delivery status.</div>
+        <h1>Interest History</h1>
+        <div class="hero-sub">Full view of when interest started and how each payment changed the interest amount.</div>
+      </section>
+
+      <section class="details-grid">
+        <div class="grid-card">
+          <div class="label">Interest Start Date</div>
+          <div class="value" id="interestStart">18 May 2026</div>
+          <div class="subvalue">Interest began from this date.</div>
+        </div>
+        <div class="grid-card">
+          <div class="label">Interest Formula</div>
+          <div class="value" id="interestFormula">6.25% / 365</div>
+          <div class="subvalue">Interest = remaining balance x 0.0625 / 365 x number of days.</div>
+        </div>
+        <div class="grid-card">
+          <div class="label">Current Monthly Interest</div>
+          <div class="value" id="currentMonthly">$0</div>
+          <div class="subvalue">Based on the current remaining balance.</div>
+        </div>
+        <div class="grid-card">
+          <div class="label">Current Daily Interest</div>
+          <div class="value" id="currentDaily">$0</div>
+          <div class="subvalue">Based on the current remaining balance.</div>
+        </div>
       </section>
 
       <section class="history-card">
         <div class="section-head">
-          <div class="section-title">Payment History</div>
-          <div class="section-meta" id="totalPaymentsLabel">—</div>
+          <div class="section-title">Interest Timeline</div>
+          <div class="section-meta" id="interestEntries">—</div>
         </div>
-        <ul class="history-list" id="historyList">
-          <li class="empty-state">No payments recorded yet</li>
+        <ul class="history-list" id="interestHistoryList">
+          <li class="history-item">
+            <div class="item-index">1</div>
+            <div class="item-date"><strong>Loading</strong>Interest history is being calculated.</div>
+            <div class="item-amount">$0</div>
+            <div class="item-after"><strong>$0</strong>Interest</div>
+          </li>
         </ul>
       </section>
-
-      <section class="details-grid">
-        <div class="grid-card">
-          <div class="label">Total Car Value</div>
-          <div class="value" id="statTotal">$37,000</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Total Paid</div>
-          <div class="value" id="statPaid">$12,500</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Remaining Balance</div>
-          <div class="value" id="dueAmount">$24,500</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Progress</div>
-          <div class="value" id="pctLabel">34%</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Interest Rate</div>
-          <div class="value" id="interestNum">6.25% p.a.</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Monthly Interest Now</div>
-          <div class="value" id="remainNum">$0</div>
-          <div class="subvalue" id="remainNote">At current remaining balance</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Interest Status</div>
-          <div class="value" id="dueDate">Not started yet</div>
-          <div class="subvalue" id="dueNote">Starts after car delivery</div>
-        </div>
-      </section>
-
-      <section class="details-grid">
-        <div class="grid-card">
-          <div class="label">Monthly Interest</div>
-          <div class="value" id="monthlyInterestCard">$0</div>
-          <div class="subvalue">Current monthly interest on remaining balance</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Daily Interest</div>
-          <div class="value" id="dailyInterestCard">$0</div>
-          <div class="subvalue">Current daily interest on remaining balance</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">How Interest Is Counted</div>
-          <div class="value" id="interestExplainTitle">6.25% from 18 May 2026</div>
-          <div class="subvalue" id="interestExplainNote">Interest = remaining balance × 0.0625 ÷ 365 × days since 18 May 2026.</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Interest Breakdown</div>
-          <div class="value" id="interestChangeTitle">Open full page</div>
-          <div class="subvalue" id="interestChangeNote">See when interest started and how each payment changed it.</div>
-          <div class="subvalue"><a href="./interest-history.html">View interest history</a></div>
-        </div>
-      </section>
-
-      <div class="completion-banner" id="completionBanner">
-        <h2>Fully Paid ✦</h2>
-        <p>Your Jaecoo J5 EV is fully paid and the remaining principal has reached zero.</p>
-      </div>
     </main>
   </div>
 
@@ -515,33 +449,33 @@
     return Math.max(0, Math.round((to - from) / msPerDay));
   }
 
-  function calculateInterestSummary(payments) {
-    const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
-    const remainingBalance = Math.max(0, TOTAL - totalPaid);
-    const today = new Date();
-    const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0);
-    const daysSinceInterestStart = diffDays(INTEREST_START_DATE, normalizedToday);
-    const dailyInterest = remainingBalance * INTEREST_RATE / 365;
-
-    return {
-      remainingBalance,
-      totalInterestAccrued: dailyInterest * daysSinceInterestStart,
-      dailyInterest,
-      daysSinceInterestStart,
-    };
-  }
-
-  function buildPaymentRows(payments) {
+  function buildInterestTimeline(payments) {
     let remainingBalance = TOTAL;
     let interestAnchorDate = INTEREST_START_DATE;
+    let interestStartInserted = false;
+    const timeline = [];
 
-    return payments.map((payment, index) => {
+    payments.forEach((payment, index) => {
       const paymentDate = parseDate(payment.date);
+      const previousBalance = remainingBalance;
       let interestPaid = 0;
+      let days = 0;
+
+      if (!interestStartInserted && paymentDate >= INTEREST_START_DATE) {
+        timeline.push({
+          date: "18 May 2026",
+          detail: "Interest started at 6.25% p.a. on the remaining balance after the earlier payments.",
+          balance: previousBalance,
+          interest: 0,
+          change: "$0",
+          formula: "Interest starts from this date. No charge was added on the start day itself.",
+        });
+        interestStartInserted = true;
+      }
 
       if (index >= 3 && paymentDate > interestAnchorDate) {
-        const days = diffDays(interestAnchorDate, paymentDate);
-        interestPaid = remainingBalance * INTEREST_RATE / 365 * days;
+        days = diffDays(interestAnchorDate, paymentDate);
+        interestPaid = previousBalance * INTEREST_RATE / 365 * days;
       }
 
       remainingBalance = Math.max(0, remainingBalance - payment.amount);
@@ -550,68 +484,58 @@
         interestAnchorDate = paymentDate;
       }
 
-      return {
-        ...payment,
-        interestPaid,
-      };
+      timeline.push({
+        date: payment.date,
+        detail: payment.type + ' · Balance $' + fmt(previousBalance) + ' to $' + fmt(remainingBalance),
+        balance: remainingBalance,
+        interest: interestPaid,
+        change: '-$' + fmt(payment.amount),
+        formula: days > 0
+          ? '$' + fmt(previousBalance) + ' x 0.0625 / 365 x ' + days + ' days = $' + interestPaid.toFixed(2)
+          : 'No interest on this transaction because it was before 18 May 2026.',
+      });
     });
+
+    if (!interestStartInserted) {
+      timeline.push({
+        date: "18 May 2026",
+        detail: "Interest starts from this date once there is an unpaid remaining balance.",
+        balance: remainingBalance,
+        interest: 0,
+        change: "$0",
+        formula: "Interest has not been charged yet because no payment happened after the start date.",
+      });
+    }
+
+    return timeline;
   }
 
   function render() {
     const payments = [...PAYMENTS].sort((a, b) => parseDate(a.date) - parseDate(b.date));
-    const paymentRows = buildPaymentRows(payments);
-    const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
-    const interestSummary = calculateInterestSummary(payments);
-    const principalBalance = interestSummary.remainingBalance;
-    const monthlyInterestAfterDelivery = principalBalance * INTEREST_RATE / 12;
-    const pct = Math.min(100, (totalPaid / TOTAL) * 100);
+    const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
+    const remainingBalance = Math.max(0, TOTAL - totalPaid);
+    const monthlyInterest = remainingBalance * INTEREST_RATE / 12;
+    const dailyInterest = remainingBalance * INTEREST_RATE / 365;
+    const timeline = buildInterestTimeline(payments);
 
-    document.getElementById('statTotal').textContent = '$' + fmt(TOTAL);
-    document.getElementById('statPaid').textContent = '$' + fmt(totalPaid);
-    document.getElementById('dueAmount').textContent = '$' + fmt(principalBalance);
-    document.getElementById('pctLabel').textContent = Math.round(pct) + '%';
-    document.getElementById('interestNum').textContent = '6.25% p.a.';
-    document.getElementById('remainNum').textContent = '$' + monthlyInterestAfterDelivery.toFixed(2);
-    document.getElementById('remainNote').textContent = 'At current remaining balance';
-    document.getElementById('dueDate').textContent = interestSummary.daysSinceInterestStart + ' days since 18 May 2026';
-    document.getElementById('dueNote').textContent = 'Interest accrues on remaining balance only';
-    document.getElementById('monthlyInterestCard').textContent = '$' + monthlyInterestAfterDelivery.toFixed(2);
-    document.getElementById('dailyInterestCard').textContent = '$' + interestSummary.dailyInterest.toFixed(2);
-    document.getElementById('interestExplainTitle').textContent = '6.25% from 18 May 2026';
-    document.getElementById('interestExplainNote').textContent = 'Interest = remaining balance x 0.0625 / 365 x days since 18 May 2026.';
-    document.getElementById('interestChangeTitle').textContent = 'Open full page';
-    document.getElementById('interestChangeNote').textContent = 'See when interest started and how each payment changed it.';
-    document.getElementById('totalPaymentsLabel').textContent = payments.length > 0 ? payments.length + ' entries' : '—';
+    document.getElementById('currentMonthly').textContent = '$' + monthlyInterest.toFixed(2);
+    document.getElementById('currentDaily').textContent = '$' + dailyInterest.toFixed(2);
+    document.getElementById('interestEntries').textContent = timeline.length + ' entries';
 
-    const list = document.getElementById('historyList');
+    const list = document.getElementById('interestHistoryList');
+    list.innerHTML = '';
 
-    if (payments.length === 0) {
-      list.innerHTML = '<li class="empty-state">No payments recorded yet</li>';
-    } else {
-      list.innerHTML = '';
-      paymentRows.forEach((p, i) => {
-        const li = document.createElement('li');
-        li.className = 'history-item';
-        li.innerHTML = `
-          <div class="item-index">${i + 1}</div>
-          <div class="item-date"><strong>${p.date}</strong>${p.type} · ${p.status}</div>
-          <div class="item-amount">$${fmt(p.amount)}</div>
-          <div class="item-after"><strong>$${fmt(p.interestPaid)}</strong>Interest Paid</div>
-        `;
-        list.appendChild(li);
-      });
-    }
-
-    if (principalBalance <= 0) {
-      document.getElementById('completionBanner').style.display = 'block';
-      document.getElementById('remainNum').textContent = '$0.00';
-      document.getElementById('monthlyInterestCard').textContent = '$0.00';
-      document.getElementById('dailyInterestCard').textContent = '$0.00';
-      document.getElementById('interestChangeTitle').textContent = 'Open full page';
-      document.getElementById('interestChangeNote').textContent = 'See when interest started and how each payment changed it.';
-    } else {
-      document.getElementById('completionBanner').style.display = 'none';
-    }
+    timeline.forEach((entry, index) => {
+      const li = document.createElement('li');
+      li.className = 'history-item';
+      li.innerHTML = `
+        <div class="item-index">${index + 1}</div>
+        <div class="item-date"><strong>${entry.date}</strong>${entry.detail}<br>${entry.formula}</div>
+        <div class="item-amount">$${fmt(entry.balance)}</div>
+        <div class="item-after"><strong>${entry.change}</strong>$${entry.interest.toFixed(2)} Interest</div>
+      `;
+      list.appendChild(li);
+    });
   }
 
   render();
