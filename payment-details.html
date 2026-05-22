@@ -443,41 +443,17 @@
           <div class="value" id="pctLabel">34%</div>
         </div>
         <div class="grid-card">
-          <div class="label">Interest Rate</div>
-          <div class="value" id="interestNum">6.25% p.a.</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Monthly Interest Now</div>
-          <div class="value" id="remainNum">$0</div>
-          <div class="subvalue" id="remainNote">At current remaining balance</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Interest Status</div>
-          <div class="value" id="dueDate">Not started yet</div>
-          <div class="subvalue" id="dueNote">Starts after car delivery</div>
+          <div class="label">Total Payments</div>
+          <div class="value" id="paymentCount">0</div>
+          <div class="subvalue">Recorded payment entries</div>
         </div>
       </section>
 
       <section class="details-grid">
         <div class="grid-card">
-          <div class="label">Monthly Interest</div>
-          <div class="value" id="monthlyInterestCard">$0</div>
-          <div class="subvalue">Current monthly interest on remaining balance</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Daily Interest</div>
-          <div class="value" id="dailyInterestCard">$0</div>
-          <div class="subvalue">Current daily interest on remaining balance</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">How Interest Is Counted</div>
-          <div class="value" id="interestExplainTitle">6.25% from 18 May 2026</div>
-          <div class="subvalue" id="interestExplainNote">Interest = remaining balance × 0.0625 ÷ 365 × days since 18 May 2026.</div>
-        </div>
-        <div class="grid-card">
-          <div class="label">Interest Breakdown</div>
-          <div class="value" id="interestChangeTitle">Open full page</div>
-          <div class="subvalue" id="interestChangeNote">See when interest started and how each payment changed it.</div>
+          <div class="label">Interest Page</div>
+          <div class="value">View Full History</div>
+          <div class="subvalue">Open the separate interest page for calculations and interest changes.</div>
           <div class="subvalue"><a href="./interest-history.html">View interest history</a></div>
         </div>
       </section>
@@ -499,9 +475,6 @@
   ];
 
   const TOTAL = 37000;
-  const INTEREST_RATE = 0.0625;
-  const INTEREST_START_DATE = new Date(2026, 4, 18, 12, 0, 0);
-
   function fmt(n) {
     return Math.round(n).toLocaleString('en-AU');
   }
@@ -510,77 +483,17 @@
     return new Date(value + ' 12:00:00');
   }
 
-  function diffDays(from, to) {
-    const msPerDay = 24 * 60 * 60 * 1000;
-    return Math.max(0, Math.round((to - from) / msPerDay));
-  }
-
-  function calculateInterestSummary(payments) {
-    const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
-    const remainingBalance = Math.max(0, TOTAL - totalPaid);
-    const today = new Date();
-    const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0);
-    const daysSinceInterestStart = diffDays(INTEREST_START_DATE, normalizedToday);
-    const dailyInterest = remainingBalance * INTEREST_RATE / 365;
-
-    return {
-      remainingBalance,
-      totalInterestAccrued: dailyInterest * daysSinceInterestStart,
-      dailyInterest,
-      daysSinceInterestStart,
-    };
-  }
-
-  function buildPaymentRows(payments) {
-    let remainingBalance = TOTAL;
-    let interestAnchorDate = INTEREST_START_DATE;
-
-    return payments.map((payment, index) => {
-      const paymentDate = parseDate(payment.date);
-      let interestPaid = 0;
-
-      if (index >= 3 && paymentDate > interestAnchorDate) {
-        const days = diffDays(interestAnchorDate, paymentDate);
-        interestPaid = remainingBalance * INTEREST_RATE / 365 * days;
-      }
-
-      remainingBalance = Math.max(0, remainingBalance - payment.amount);
-
-      if (paymentDate > INTEREST_START_DATE) {
-        interestAnchorDate = paymentDate;
-      }
-
-      return {
-        ...payment,
-        interestPaid,
-      };
-    });
-  }
-
   function render() {
     const payments = [...PAYMENTS].sort((a, b) => parseDate(a.date) - parseDate(b.date));
-    const paymentRows = buildPaymentRows(payments);
     const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
-    const interestSummary = calculateInterestSummary(payments);
-    const principalBalance = interestSummary.remainingBalance;
-    const monthlyInterestAfterDelivery = principalBalance * INTEREST_RATE / 12;
+    const principalBalance = Math.max(0, TOTAL - totalPaid);
     const pct = Math.min(100, (totalPaid / TOTAL) * 100);
 
     document.getElementById('statTotal').textContent = '$' + fmt(TOTAL);
     document.getElementById('statPaid').textContent = '$' + fmt(totalPaid);
     document.getElementById('dueAmount').textContent = '$' + fmt(principalBalance);
     document.getElementById('pctLabel').textContent = Math.round(pct) + '%';
-    document.getElementById('interestNum').textContent = '6.25% p.a.';
-    document.getElementById('remainNum').textContent = '$' + monthlyInterestAfterDelivery.toFixed(2);
-    document.getElementById('remainNote').textContent = 'At current remaining balance';
-    document.getElementById('dueDate').textContent = interestSummary.daysSinceInterestStart + ' days since 18 May 2026';
-    document.getElementById('dueNote').textContent = 'Interest accrues on remaining balance only';
-    document.getElementById('monthlyInterestCard').textContent = '$' + monthlyInterestAfterDelivery.toFixed(2);
-    document.getElementById('dailyInterestCard').textContent = '$' + interestSummary.dailyInterest.toFixed(2);
-    document.getElementById('interestExplainTitle').textContent = '6.25% from 18 May 2026';
-    document.getElementById('interestExplainNote').textContent = 'Interest = remaining balance x 0.0625 / 365 x days since 18 May 2026.';
-    document.getElementById('interestChangeTitle').textContent = 'Open full page';
-    document.getElementById('interestChangeNote').textContent = 'See when interest started and how each payment changed it.';
+    document.getElementById('paymentCount').textContent = payments.length;
     document.getElementById('totalPaymentsLabel').textContent = payments.length > 0 ? payments.length + ' entries' : '—';
 
     const list = document.getElementById('historyList');
@@ -589,14 +502,14 @@
       list.innerHTML = '<li class="empty-state">No payments recorded yet</li>';
     } else {
       list.innerHTML = '';
-      paymentRows.forEach((p, i) => {
+      payments.forEach((p, i) => {
         const li = document.createElement('li');
         li.className = 'history-item';
         li.innerHTML = `
           <div class="item-index">${i + 1}</div>
           <div class="item-date"><strong>${p.date}</strong>${p.type} · ${p.status}</div>
           <div class="item-amount">$${fmt(p.amount)}</div>
-          <div class="item-after"><strong>$${fmt(p.interestPaid)}</strong>Interest Paid</div>
+          <div class="item-after"><strong>${p.status}</strong>Recorded</div>
         `;
         list.appendChild(li);
       });
@@ -604,11 +517,6 @@
 
     if (principalBalance <= 0) {
       document.getElementById('completionBanner').style.display = 'block';
-      document.getElementById('remainNum').textContent = '$0.00';
-      document.getElementById('monthlyInterestCard').textContent = '$0.00';
-      document.getElementById('dailyInterestCard').textContent = '$0.00';
-      document.getElementById('interestChangeTitle').textContent = 'Open full page';
-      document.getElementById('interestChangeNote').textContent = 'See when interest started and how each payment changed it.';
     } else {
       document.getElementById('completionBanner').style.display = 'none';
     }
