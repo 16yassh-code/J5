@@ -404,6 +404,11 @@
           <div class="value" id="currentDaily">$0</div>
           <div class="subvalue">Based on the current remaining balance.</div>
         </div>
+        <div class="grid-card">
+          <div class="label">Total Interest To Pay</div>
+          <div class="value" id="totalInterestToPay">$0</div>
+          <div class="subvalue" id="totalInterestToPayNote">If the remaining balance is cleared today.</div>
+        </div>
       </section>
 
       <section class="history-card">
@@ -438,6 +443,7 @@
   const TOTAL = 37000;
   const INTEREST_RATE = 0.0625;
   const INTEREST_START_DATE = new Date(2026, 4, 18, 12, 0, 0);
+  const TODAY = new Date(2026, 7, 6, 12, 0, 0);
 
   function fmt(n) {
     return Math.round(n).toLocaleString('en-AU');
@@ -513,6 +519,35 @@
     return timeline;
   }
 
+  function calculateTotalInterestToPay(payments) {
+    let remainingBalance = TOTAL;
+    let interestAnchorDate = INTEREST_START_DATE;
+    let totalInterest = 0;
+
+    payments.forEach((payment, index) => {
+      const paymentDate = parseDate(payment.date);
+      const previousBalance = remainingBalance;
+
+      if (index >= 3 && paymentDate > interestAnchorDate) {
+        const days = diffDays(interestAnchorDate, paymentDate);
+        totalInterest += previousBalance * INTEREST_RATE / 365 * days;
+      }
+
+      remainingBalance = Math.max(0, remainingBalance - payment.amount);
+
+      if (paymentDate > INTEREST_START_DATE) {
+        interestAnchorDate = paymentDate;
+      }
+    });
+
+    if (remainingBalance > 0 && TODAY > interestAnchorDate) {
+      const daysSinceLastPayment = diffDays(interestAnchorDate, TODAY);
+      totalInterest += remainingBalance * INTEREST_RATE / 365 * daysSinceLastPayment;
+    }
+
+    return totalInterest;
+  }
+
   function render() {
     const payments = [...PAYMENTS].sort((a, b) => parseDate(a.date) - parseDate(b.date));
     const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
@@ -520,9 +555,14 @@
     const monthlyInterest = remainingBalance * INTEREST_RATE / 12;
     const dailyInterest = remainingBalance * INTEREST_RATE / 365;
     const timeline = buildInterestTimeline(payments);
+    const totalInterestToPay = calculateTotalInterestToPay(payments);
 
     document.getElementById('currentMonthly').textContent = '$' + monthlyInterest.toFixed(2);
     document.getElementById('currentDaily').textContent = '$' + dailyInterest.toFixed(2);
+    document.getElementById('totalInterestToPay').textContent = '$' + totalInterestToPay.toFixed(2);
+    document.getElementById('totalInterestToPayNote').textContent = remainingBalance > 0
+      ? 'If the remaining balance is cleared on 06 Aug 2026.'
+      : 'The remaining balance is already zero.';
     document.getElementById('interestEntries').textContent = timeline.length + ' entries';
 
     const list = document.getElementById('interestHistoryList');
