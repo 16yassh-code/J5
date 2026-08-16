@@ -409,6 +409,11 @@
           <div class="value" id="totalInterestToPay">$0</div>
           <div class="subvalue" id="totalInterestToPayNote">If the remaining balance is cleared today.</div>
         </div>
+        <div class="grid-card">
+          <div class="label">Total Due With Interest</div>
+          <div class="value" id="totalDueWithInterest">$0</div>
+          <div class="subvalue" id="totalDueWithInterestNote">Remaining balance plus accrued interest as of today.</div>
+        </div>
       </section>
 
       <section class="history-card">
@@ -438,12 +443,13 @@
     { date: "04 Jun 2026", amount: 1000, type: "Down Payment", status: "Paid" },
     { date: "18 Jun 2026", amount: 1250, type: "Down Payment", status: "Paid" },
     { date: "06 Aug 2026", amount: 1600, type: "Down Payment", status: "Paid" },
+    { date: "16 Aug 2026", amount: 800, type: "Down Payment", status: "Paid" },
   ];
 
   const TOTAL = 37000;
   const INTEREST_RATE = 0.0625;
   const INTEREST_START_DATE = new Date(2026, 4, 18, 12, 0, 0);
-  const TODAY = new Date(2026, 7, 6, 12, 0, 0);
+  const TODAY = new Date(2026, 7, 16, 12, 0, 0);
 
   function fmt(n) {
     return Math.round(n).toLocaleString('en-AU');
@@ -471,11 +477,15 @@
       let days = 0;
 
       if (!interestStartInserted && paymentDate >= INTEREST_START_DATE) {
+        const totalPlusInterest = previousBalance;
         timeline.push({
           date: "18 May 2026",
           detail: "Interest started at 6.25% p.a. on the remaining balance after the earlier payments.",
           balance: previousBalance,
           interest: 0,
+          monthlyInterest: previousBalance * INTEREST_RATE / 12,
+          totalPlusInterest,
+          monthlyInterestOnTotalPlusInterest: totalPlusInterest * INTEREST_RATE / 12,
           change: "$0",
           formula: "Interest starts from this date. No charge was added on the start day itself.",
         });
@@ -493,11 +503,16 @@
         interestAnchorDate = paymentDate;
       }
 
+      const totalPlusInterest = remainingBalance + interestPaid;
+
       timeline.push({
         date: payment.date,
         detail: payment.type + ' · Balance $' + fmt(previousBalance) + ' to $' + fmt(remainingBalance),
         balance: remainingBalance,
         interest: interestPaid,
+        monthlyInterest: remainingBalance * INTEREST_RATE / 12,
+        totalPlusInterest,
+        monthlyInterestOnTotalPlusInterest: totalPlusInterest * INTEREST_RATE / 12,
         change: '-$' + fmt(payment.amount),
         formula: days > 0
           ? '$' + fmt(previousBalance) + ' x 0.0625 / 365 x ' + days + ' days = $' + interestPaid.toFixed(2)
@@ -506,11 +521,15 @@
     });
 
     if (!interestStartInserted) {
+      const totalPlusInterest = remainingBalance;
       timeline.push({
         date: "18 May 2026",
         detail: "Interest starts from this date once there is an unpaid remaining balance.",
         balance: remainingBalance,
         interest: 0,
+        monthlyInterest: remainingBalance * INTEREST_RATE / 12,
+        totalPlusInterest,
+        monthlyInterestOnTotalPlusInterest: totalPlusInterest * INTEREST_RATE / 12,
         change: "$0",
         formula: "Interest has not been charged yet because no payment happened after the start date.",
       });
@@ -556,13 +575,18 @@
     const dailyInterest = remainingBalance * INTEREST_RATE / 365;
     const timeline = buildInterestTimeline(payments);
     const totalInterestToPay = calculateTotalInterestToPay(payments);
+    const totalDueWithInterest = remainingBalance + totalInterestToPay;
 
     document.getElementById('currentMonthly').textContent = '$' + monthlyInterest.toFixed(2);
     document.getElementById('currentDaily').textContent = '$' + dailyInterest.toFixed(2);
     document.getElementById('totalInterestToPay').textContent = '$' + totalInterestToPay.toFixed(2);
+    document.getElementById('totalDueWithInterest').textContent = '$' + totalDueWithInterest.toFixed(2);
     document.getElementById('totalInterestToPayNote').textContent = remainingBalance > 0
-      ? 'If the remaining balance is cleared on 06 Aug 2026.'
+      ? 'If the remaining balance is cleared on 16 Aug 2026.'
       : 'The remaining balance is already zero.';
+    document.getElementById('totalDueWithInterestNote').textContent = remainingBalance > 0
+      ? '$' + remainingBalance.toFixed(2) + ' remaining + $' + totalInterestToPay.toFixed(2) + ' interest on 16 Aug 2026.'
+      : 'Nothing is due because the remaining balance is already zero.';
     document.getElementById('interestEntries').textContent = timeline.length + ' entries';
 
     const list = document.getElementById('interestHistoryList');
@@ -574,8 +598,8 @@
       li.innerHTML = `
         <div class="item-index">${index + 1}</div>
         <div class="item-date"><strong>${entry.date}</strong>${entry.detail}<br>${entry.formula}</div>
-        <div class="item-amount">$${fmt(entry.balance)}</div>
-        <div class="item-after"><strong>${entry.change}</strong>$${entry.interest.toFixed(2)} Interest</div>
+        <div class="item-amount">$${fmt(entry.balance)}<br>$${entry.totalPlusInterest.toFixed(2)} Total + Interest</div>
+        <div class="item-after"><strong>${entry.change}</strong>$${entry.interest.toFixed(2)} Interest<br>$${entry.monthlyInterest.toFixed(2)} Monthly<br>$${entry.monthlyInterestOnTotalPlusInterest.toFixed(2)} Interest on Total + Interest</div>
       `;
       list.appendChild(li);
     });
