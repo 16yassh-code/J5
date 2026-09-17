@@ -416,7 +416,7 @@
       <section class="hero">
         <div class="eyebrow">Interest Ledger</div>
         <h1>Interest history with a clearer read.</h1>
-        <div class="hero-sub">Track when interest started, how each payment affected the balance, and what is still due with accrued interest as of Sunday, September 13, 2026.</div>
+        <div class="hero-sub">Track when interest started, how each payment affected the balance, and what is still due with accrued interest as of Thursday, September 17, 2026.</div>
       </section>
 
       <section class="details-grid">
@@ -485,12 +485,13 @@
     { date: "27 Aug 2026", amount: 1000, type: "Down Payment", status: "Paid" },
     { date: "06 Sep 2026", amount: 1000, type: "Down Payment", status: "Paid" },
     { date: "13 Sep 2026", amount: 500, type: "Down Payment", status: "Paid" },
+    { date: "17 Sep 2026", amount: 1000, type: "Down Payment", status: "Paid" },
   ];
 
   const TOTAL = 37000;
   const INTEREST_RATE = 0.0625;
   const INTEREST_START_DATE = new Date(2026, 4, 18, 12, 0, 0);
-  const TODAY = new Date(2026, 8, 13, 12, 0, 0);
+  const TODAY = new Date(2026, 8, 17, 12, 0, 0);
 
   function fmt(n) {
     return Math.round(n).toLocaleString('en-AU');
@@ -623,10 +624,10 @@
     document.getElementById('totalInterestToPay').textContent = '$' + totalInterestToPay.toFixed(2);
     document.getElementById('totalDueWithInterest').textContent = '$' + totalDueWithInterest.toFixed(2);
     document.getElementById('totalInterestToPayNote').textContent = remainingBalance > 0
-      ? 'If the remaining balance is cleared on 13 Sep 2026.'
+      ? 'If the remaining balance is cleared on 17 Sep 2026.'
       : 'The remaining balance is already zero.';
     document.getElementById('totalDueWithInterestNote').textContent = remainingBalance > 0
-      ? '$' + remainingBalance.toFixed(2) + ' remaining + $' + totalInterestToPay.toFixed(2) + ' interest on 13 Sep 2026.'
+      ? '$' + remainingBalance.toFixed(2) + ' remaining + $' + totalInterestToPay.toFixed(2) + ' interest on 17 Sep 2026.'
       : 'Nothing is due because the remaining balance is already zero.';
     document.getElementById('interestEntries').textContent = timeline.length + ' entries';
 
